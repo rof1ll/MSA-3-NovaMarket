@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: scaletestapp
+  namespace: scaletest
+  labels:
+    app: scaletestapp
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - scaletest
+  selector:
+    matchLabels:
+      app: scaletestapp
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
+

@@ -1,0 +1,24 @@
+LAST SEEN   TYPE      REASON                         OBJECT                                        MESSAGE
+33m         Normal    ScalingReplicaSet              deployment/scaletestapp                       Scaled up replica set scaletestapp-57595f8c7b from 0 to 1
+33m         Normal    SuccessfulCreate               replicaset/scaletestapp-57595f8c7b            Created pod: scaletestapp-57595f8c7b-jz2ln
+33m         Normal    Scheduled                      pod/scaletestapp-57595f8c7b-jz2ln             Successfully assigned scaletest/scaletestapp-57595f8c7b-jz2ln to minikube
+33m         Normal    Pulling                        pod/scaletestapp-57595f8c7b-jz2ln             Pulling image "ghcr.io/yandex-practicum/scaletestapp:latest"
+19m         Normal    Created                        pod/scaletestapp-57595f8c7b-jz2ln             Container created
+19m         Normal    Started                        pod/scaletestapp-57595f8c7b-jz2ln             Container started
+33m         Normal    Pulled                         pod/scaletestapp-57595f8c7b-jz2ln             Successfully pulled image "ghcr.io/yandex-practicum/scaletestapp:latest" in 8.268s (8.268s including waiting). Image size: 10812525 bytes.
+32m         Warning   FailedComputeMetricsReplicas   horizontalpodautoscaler/scaletestapp-memory   invalid metrics (1 invalid out of 1), first error is: failed to get memory resource metric value: failed to get memory utilization: unable to get metrics for resource memory: no metrics returned from resource metrics API
+32m         Warning   FailedGetResourceMetric        horizontalpodautoscaler/scaletestapp-memory   failed to get memory utilization: unable to get metrics for resource memory: no metrics returned from resource metrics API
+19m         Normal    ScalingReplicaSet              deployment/scaletestapp                       Scaled up replica set scaletestapp-57595f8c7b from 1 to 2
+19m         Normal    SuccessfulRescale              horizontalpodautoscaler/scaletestapp-memory   New size: 2; reason: memory resource utilization (percentage of request) above target
+19m         Normal    Scheduled                      pod/scaletestapp-57595f8c7b-46g79             Successfully assigned scaletest/scaletestapp-57595f8c7b-46g79 to minikube
+19m         Normal    SuccessfulCreate               replicaset/scaletestapp-57595f8c7b            Created pod: scaletestapp-57595f8c7b-46g79
+19m         Normal    Created                        pod/scaletestapp-57595f8c7b-46g79             Container created
+19m         Normal    Started                        pod/scaletestapp-57595f8c7b-46g79             Container started
+19m         Normal    Pulled                         pod/scaletestapp-57595f8c7b-46g79             Container image "ghcr.io/yandex-practicum/scaletestapp:latest" already present on machine and can be accessed by the pod
+19m         Normal    Pulled                         pod/scaletestapp-57595f8c7b-jz2ln             Container image "ghcr.io/yandex-practicum/scaletestapp:latest" already present on machine and can be accessed by the pod
+13m         Normal    SuccessfulDelete               replicaset/scaletestapp-57595f8c7b            Deleted pod: scaletestapp-57595f8c7b-jz2ln
+13m         Normal    Killing                        pod/scaletestapp-57595f8c7b-jz2ln             Stopping container app
+13m         Normal    SuccessfulRescale              horizontalpodautoscaler/scaletestapp-memory   New size: 1; reason: All metrics below target
+13m         Normal    ScalingReplicaSet              deployment/scaletestapp                       Scaled down replica set scaletestapp-57595f8c7b from 2 to 1
+103s        Warning   FailedGetPodsMetric            horizontalpodautoscaler/scaletestapp-rps      unable to get metric http_requests_per_second: unable to fetch metrics from custom metrics API: no known available metric versions found
+103s        Warning   FailedComputeMetricsReplicas   horizontalpodautoscaler/scaletestapp-rps      invalid metrics (1 invalid out of 1), first error is: failed to get pods metric value: unable to get metric http_requests_per_second: unable to fetch metrics from custom metrics API: no known available metric versions found
