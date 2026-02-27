@@ -1,0 +1,42 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(покупатель, "Покупатель", "Мобильное приложение / Web")
+
+System_Boundary(novamarket, "NovaMarket") {
+
+    Container(nginx, "NGINX", "API Gateway")
+
+    Container(metrics, "Метрики", "Prometheus/Grafana", "Сбор и визуализация метрик")
+
+    Container(auth, "Сервис аутенфикации", "Spring Boot", "JWT")
+    Container(catalog, "Сервис обработки каталога", "Spring Boot", "Товары")
+    Container(review, "Сервис отзывов", "Spring Boot", "Отзывы")
+    Container(cart, "Сервис корзины", "Spring Boot", "Корзина")
+    Container(order, "Сервис заказов", "Spring Boot", "Командная модель заказов")
+
+    Container(invent, "Сервис инвентаризации", "Spring Boot", "Резервирование")
+    Container(payment, "Платежный сервис", "Spring Boot", "Платежи")
+    Container(delivery, "Сервис логистики", "Spring Boot", "Доставка")
+    Container(notification, "Сервис уведомлений", "Spring Boot", "Уведомления")
+    Container(seller_service, "Сервис продавцов", "Spring Boot", "ЛК продавца")
+
+    Container(order_history, "Сервис истории заказов (Query)", "Spring Boot", "CQRS read-model. Агрегированная история заказов")
+
+    ContainerDb(order_history_db, "Order History DB", "PostgreSQL / NoSQL", "Денормализованная модель истории заказов")
+
+    Container(kafka, "Kafka", "Apache Kafka", "Брокер сообщений")
+}
+
+Rel(покупатель, nginx, "use")
+
+Rel(nginx, order_history, "GET /orders/history")
+Rel(order_history, order_history_db, "Read")
+
+Rel(order, kafka, "Publish Order events")
+Rel(payment, kafka, "Publish Payment events")
+Rel(delivery, kafka, "Publish Delivery events")
+
+Rel(kafka, order_history, "Consume events")
+
+@enduml
