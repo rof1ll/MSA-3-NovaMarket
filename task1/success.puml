@@ -1,0 +1,22 @@
+@startuml
+title 200
+participant Покупатель
+participant "Сервис заказов"
+participant "Сервис инвентаризации"
+participant "Платжный сервис"
+participant "Сервис логистики"
+
+Покупатель -> "Сервис заказов" : CreateOrder
+"Сервис заказов" -> Kafka : OrderCreated
+
+"Сервис инвентаризации" -> Kafka : StockReserved
+
+"Платжный сервис" -> Kafka : PaymentRequested
+"Платжный сервис" -> Kafka : PaymentSucceeded
+
+"Сервис логистики" -> Kafka : DeliveryRequested
+"Сервис логистики" -> Kafka : DeliveryCreated
+
+"Сервис заказов" -> Kafka : OrderCompleted
+
+@enduml
