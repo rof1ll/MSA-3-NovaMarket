@@ -5,7 +5,7 @@ Person(покупатель, "Покупатель", "Веб?")
 
 System_Boundary(novamarket, "NovaMarket") {
 
-    Container(nginx, "NGINX", "API Gateway")
+    Container(kong, "API Gateway", "Kong")
     Container(metrics, "Метрики", "Prometheus/Grafana", "Сбор и визуализация метрик")
     Container(auth, "Сервис аутенфикации", "Spring Boot", "Аутенфикация/JWT")
     Container(catalog, "Сервис обработки каталога", "Spring Boot", "Меню товаров с фильтрацией")
@@ -18,13 +18,25 @@ System_Boundary(novamarket, "NovaMarket") {
     Container(delivery, "Сервис логистики", "Spring Boot", "Формирование заявки на доставку")
     Container(notification, "Сервис уведомлений", "Spring Boot", "Уведомления")
     Container(seller_service, "Сервис продавцов", "Spring Boot", "ЛК продавца")
+    Container(history_service, "Микросервис истории заказов", "Spring Boot", "CQRS")
+    Container(cache_redis, "Redis Cache", "Redis", "Кэш каталога, сессий и горячих данных")
 
+    ContainerDb(auth_db, "База пользователей", "PostgreSQL")
+    ContainerDb(catalog_db, "База каталога", "PostgreSQL")
+    ContainerDb(review_db, "База отзывов", "PostgreSQL")
+    ContainerDb(cart_db, "База корзин", "PostgreSQL")
+    ContainerDb(order_db, "База заказов", "PostgreSQL")
+    ContainerDb(invent_db, "База товаров", "PostgreSQL")
+    ContainerDb(payment_db, "База платежей", "PostgreSQL")
+    ContainerDb(delivery_db, "База логистики", "PostgreSQL")
+    ContainerDb(history_db, "База исторических заказов", "PostgreSQL")
     Container(kafka, "Kafka", "Apache Kafka", "Брокер сообщений")
+    
 }
 
-Rel(покупатель, nginx, "use")
+Rel(покупатель, kong, "use")
 
-Rel_L(metrics, nginx, "")
+Rel_L(metrics, kong, "")
 Rel(metrics, review, "")
 Rel(metrics, order, "")
 Rel(metrics, invent, "")
@@ -34,12 +46,29 @@ Rel(metrics, auth, "")
 Rel(metrics, catalog, "")
 Rel(metrics, cart, "")
 Rel(metrics, payment, "")
+Rel(metrics, history_service, "")
 
-Rel(nginx, auth, "REST API")
-Rel(nginx, catalog, "REST API")
-Rel(nginx, review, "REST API")
-Rel(nginx, cart, "REST API")
-Rel(nginx, order, "REST API")
+Rel(kong, auth, "REST API")
+Rel(kong, catalog, "REST API")
+Rel(kong, review, "REST API")
+Rel(kong, cart, "REST API")
+Rel(kong, order, "REST API")
+Rel(kong, history_service, "REST API")
+
+Rel(auth, auth_db, "")
+Rel(catalog, catalog_db, "")
+Rel(review, review_db, "")
+Rel(cart, cart_db, "")
+Rel(order, order_db, "")
+Rel(invent, invent_db, "")
+Rel(payment, payment_db, "")
+Rel(delivery, delivery_db, "")
+Rel(seller_service, invent_db, "")
+
+Rel(auth, cache_redis, "")
+Rel(catalog, cache_redis, "кэш популярных карточек")
+Rel(cart, cache_redis, "кэш корзины")
+Rel(order, cache_redis, "")
 
 Rel(order, kafka, "Продюсер")
 Rel(invent, kafka, "Консьюмер/Продюсер")
@@ -47,5 +76,8 @@ Rel(payment, kafka, "Консьюмер/Продюсер")
 Rel(delivery, kafka, "Консьюмер/Продюсер")
 Rel(notification, kafka, "Консьюмер")
 Rel(seller_service, kafka, "Консьюмер")
+Rel(history_service, kafka, "Данные о заказах (консьюмер)")
+
+Rel(history_service, history_db, "чтение/запись")
 
 @enduml

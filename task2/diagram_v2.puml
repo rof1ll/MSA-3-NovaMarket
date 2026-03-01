@@ -5,7 +5,7 @@ Person(покупатель, "Покупатель", "Мобильное при�
 
 System_Boundary(novamarket, "NovaMarket") {
 
-    Container(nginx, "NGINX", "API Gateway")
+    Container(nginx, "Kong", "API Gateway")
 
     Container(metrics, "Метрики", "Prometheus/Grafana", "Сбор и визуализация метрик")
 
